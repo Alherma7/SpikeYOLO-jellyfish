@@ -1,0 +1,9 @@
+# dataset.yaml
+
+path: /home/alher/SpikeYOLO/dataset_Jellyfish
+train: train/images
+val: val/images
+test: test/images
+
+nc: 2 # number of classes
+names: ["none", "jellyfish"]

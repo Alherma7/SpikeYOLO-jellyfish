@@ -1,0 +1,12 @@
+# Dataset config for the jellyFish.v1i.yolov9 dataset, consumed via ultralytics' check_det_dataset.
+# No `path:` key on purpose: check_det_dataset then resolves paths relative to this file's own
+# directory (the repo root), not ultralytics' global datasets dir, since jellyFish.v1i.yolov9/
+# lives right next to this file.
+
+train: jellyFish.v1i.yolov9/train/images
+val: jellyFish.v1i.yolov9/valid/images
+
+names:
+  0: C- tuberculata
+  1: P- noctiluca
+  2: R- pulmo

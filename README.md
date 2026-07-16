@@ -1,3 +1,11 @@
+> **Nota de este fork**: este repositorio parte de [BICLab/SpikeYOLO](https://github.com/BICLab/SpikeYOLO) (ECCV2024 Best Paper Candidate, ver abajo). Sobre el pipeline Gen1 original de los autores (`SpikeYOLO_for_Gen1/`) añado un experimento propio en curso: adaptar la misma red spiking (SNN) a un dataset RGB convencional de clasificación/detección de medusas (Jellyfish), mediante codificación por tasa de disparo (spike-rate encoding) con `snntorch`, un `CustomDataset` propio y un `SpikeDetectionTrainer`/`Validator` que sí usan el motor real de entrenamiento de `ultralytics` (a diferencia del pipeline Gen1 original). Detalles de arquitectura y comandos en [`SpikeYOLO_for_Gen1/CLAUDE.md`](SpikeYOLO_for_Gen1/CLAUDE.md).
+>
+> Igual que el original, este repo se distribuye bajo **AGPL-3.0** (ver [`LICENSE`](LICENSE)); todo el mérito del modelo SpikeYOLO, el pipeline Gen1 y el paper es de los autores originales (BICLab, Institute of Automation, Chinese Academy of Sciences).
+>
+> Los datasets de medusas (`dataset_Jellyfish/`, `SpikeYOLO_for_Gen1/jellyFish.v1i.yolov9*/`) y los checkpoints (`*.pt`) no están incluidos en este repo — hay que generarlos/descargarlos aparte.
+
+---
+
 # Integer-Valued Training and Spike-Driven Inference Spiking Neural Network for High-performance and Energy-efficient Object Detection (ECCV2024 Best Paper Candidate)
 
 [Xinhao Luo](), [Man Yao](https://scholar.google.com/citations?user=eE4vvp0AAAAJ), [Yuhong Chou](https://scholar.google.com.hk/citations?hl=zh-CN&user=8CpWM4cAAAAJ), [Bo Xu]() and [Guoqi Li](https://scholar.google.com/citations?user=qCfE--MAAAAJ&)

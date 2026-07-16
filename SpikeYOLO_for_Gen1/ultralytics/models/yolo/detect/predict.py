@@ -30,11 +30,13 @@ class DetectionPredictor(BasePredictor):
                                         classes=self.args.classes)
 
         if not isinstance(orig_imgs, list):  # input images are a torch.Tensor, not a list
+            if len(orig_imgs.shape) == 5:
+                orig_imgs = orig_imgs.mean(0)
             orig_imgs = ops.convert_torch2numpy_batch(orig_imgs)
 
         results = []
         for i, pred in enumerate(preds):  #1个   shape:[2,6]
-            orig_img = orig_imgs[i]  #480,640,3
+            orig_img = orig_imgs[i] if i < len(orig_imgs) else orig_imgs[0]  #480,640,3
             if len(img.shape)==5:
                 pred[:, :4] = ops.scale_boxes(img.shape[3:], pred[:, :4], orig_img.shape[1:])
             else:

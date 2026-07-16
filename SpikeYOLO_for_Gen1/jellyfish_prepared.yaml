@@ -1,0 +1,12 @@
+# Dataset config for the curated + augmented jellyfish dataset produced by
+# prepare_jellyfish_dataset.py (jellyFish.v1i.yolov9_prepared/). Run that script first.
+# No `path:` key on purpose: check_det_dataset then resolves paths relative to this file's own
+# directory (the repo root), not ultralytics' global datasets dir.
+
+train: jellyFish.v1i.yolov9_prepared/train/images
+val: jellyFish.v1i.yolov9_prepared/valid/images
+
+names:
+  0: C- tuberculata
+  1: P- noctiluca
+  2: R- pulmo

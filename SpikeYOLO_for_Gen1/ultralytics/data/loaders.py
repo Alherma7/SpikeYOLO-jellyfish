@@ -444,6 +444,12 @@ class LoadTensor:
         """Validate and format an image to torch.Tensor."""
         s = f'WARNING ⚠️ torch.Tensor inputs should be BCHW i.e. shape(1, 3, 640, 640) ' \
             f'divisible by stride {stride}. Input shape{tuple(im.shape)} is incompatible.'
+        
+        if len(im.shape) == 5:
+            # Formato spike: T,B,C,H,W
+            if im.shape[3] % stride or im.shape[4] % stride:
+                raise ValueError(f'Input H,W must be divisible by stride {stride}')  
+            return im
         if len(im.shape) != 4:
             if len(im.shape) != 3:
                 raise ValueError(s)

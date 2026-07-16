@@ -128,7 +128,7 @@ class BasePredictor:
 
         im = im.to(self.device)
         im = im.half() if self.model.fp16 else im.float()  # uint8 to fp16/32
-        if not_tensor:
+        if not_tensor and len(im.shape) == 4:
             im /= 255  # 0 - 255 to 0.0 - 1.0
         return im
 

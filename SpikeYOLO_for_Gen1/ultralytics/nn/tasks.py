@@ -76,6 +76,11 @@ class BaseModel(nn.Module):
             (torch.Tensor): The last output of the model.
         """
         functional.reset_net(self.model)
+        if x.dim() == 5 and not isinstance(self.model[0], MS_GetT):
+            # Dataloader yields [B,T,C,H,W]; SNN layers (MS_DownSampling/SpikeConv/...) require
+            # [T,B,C,H,W]. MS_GetT normally does this transpose itself, but it's disabled in this
+            # config, so do it once here instead of duplicating it in every dataset/trainer.
+            x = x.transpose(0, 1)
         y, dt = [], []  # outputs
         for m in self.model:
             if m.f != -1:  # if not from previous layer
@@ -238,17 +243,20 @@ class DetectionModel(BaseModel):
             LOGGER.info(f"Overriding model.yaml nc={self.yaml['nc']} with nc={nc}")
             self.yaml['nc'] = nc  # override YAML value
         self.model, self.save = parse_model(deepcopy(self.yaml), ch=ch, verbose=verbose)  # model, savelist
-        self.model = self.model.cuda()
         self.names = {i: f'{i}' for i in range(self.yaml['nc'])}  # default names dict
         self.inplace = self.yaml.get('inplace', True)
 
         # Build strides
         m = self.model[-1]  # Detect()
         if isinstance(m, (Detect, Segment, Pose, SpikeDetect)):
-            s = 256  # 2x min stride
+            s = 640  # 2x min stride
+
+            # Dummy-forward stride autodetection doesn't work for this 5D SNN input, so the strides
+            # are set directly from the backbone's downsampling ratios (MS_DownSampling factors
+            # /4, /2, /2, /2 -> cumulative /8, /16, /32 at the P3/P4/P5 head taps).
+            m.stride = torch.tensor([8.0, 16.0, 32.0])
+
             m.inplace = self.inplace
-            forward = lambda x: self.forward(x)[0] if isinstance(m, (Segment, Pose)) else self.forward(x)
-            m.stride = torch.tensor([s / x.shape[-2] for x in forward(torch.zeros(1, ch, s, s).cuda())])  # forward
             self.stride = m.stride
             m.bias_init()  # only run once
         else:
@@ -574,7 +582,9 @@ def torch_safe_load(weight):
             'ultralytics.yolo.utils': 'ultralytics.utils',
             'ultralytics.yolo.v8': 'ultralytics.models.yolo',
             'ultralytics.yolo.data': 'ultralytics.data'}):  # for legacy 8.0 Classify and Pose models
-            return torch.load(file, map_location='cpu'), file  # load
+            # weights_only=False: torch>=2.6 defaults to weights_only=True, which can't unpickle
+            # our own DetectionModel checkpoints.
+            return torch.load(file, map_location='cpu', weights_only=False), file  # load
 
     except ModuleNotFoundError as e:  # e.name is missing module name
         if e.name == 'models':

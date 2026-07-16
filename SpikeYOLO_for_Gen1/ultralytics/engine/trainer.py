@@ -475,7 +475,8 @@ class BaseTrainer:
         self.scaler.step(self.optimizer)
         self.scaler.update()
         self.optimizer.zero_grad()
-        torch.cuda.synchronize()
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
         functional.reset_net(self.model)  # this*
         if self.ema:
             self.ema.update(self.model)

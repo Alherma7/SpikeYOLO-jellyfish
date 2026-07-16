@@ -311,5 +311,26 @@ class Concat(nn.Module):
         self.d = dimension
 
     def forward(self, x):
-        """Forward pass for the YOLOv8 mask Proto module."""
-        return torch.cat(x, self.d)
+        """Concatenate a list of tensors along a dimension, adapting sizes dynamically for SpikeYOLO."""
+        # Tomamos las dimensiones espaciales (H, W) del primer tensor como referencia
+        target_h, target_w = x[0].shape[-2], x[0].shape[-1]
+        
+        adapted_x = []
+        for tensor in x:
+            if tensor.shape[-2] != target_h or tensor.shape[-1] != target_w:
+                # Si las dimensiones no coinciden, adaptamos usando interpolación
+                is_5d = len(tensor.shape) == 5
+                if is_5d:
+                    T, B, C, H, W = tensor.shape
+                    tensor_flat = tensor.reshape(T * B, C, H, W)
+                    tensor_resized = torch.nn.functional.interpolate(
+                        tensor_flat, size=(target_h, target_w), mode='nearest'
+                    )
+                    tensor = tensor_resized.reshape(T, B, C, target_h, target_w)
+                else:
+                    tensor = torch.nn.functional.interpolate(
+                        tensor, size=(target_h, target_w), mode='nearest'
+                    )
+            adapted_x.append(tensor)
+            
+        return torch.cat(adapted_x, self.d)

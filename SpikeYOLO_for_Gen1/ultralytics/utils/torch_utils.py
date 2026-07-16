@@ -444,7 +444,9 @@ def strip_optimizer(f: Union[str, Path] = 'best.pt', s: str = '') -> None:
             strip_optimizer(f)
         ```
     """
-    x = torch.load(f, map_location=torch.device('cpu'))
+    # weights_only=False: these are our own just-saved checkpoints, not third-party files;
+    # torch>=2.6 defaults to weights_only=True, which can't unpickle the DetectionModel class.
+    x = torch.load(f, map_location=torch.device('cpu'), weights_only=False)
     if 'model' not in x:
         LOGGER.info(f'Skipping {f}, not a valid Ultralytics model.')
         return
