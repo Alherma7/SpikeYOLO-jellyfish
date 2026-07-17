@@ -11,18 +11,9 @@ cada frame se filtra con Canny y se codifica a impulsos mediante delta modulatio
 cada frame con el anterior) antes de pasar por el modelo. Los clips muestran el mapa de bordes
 que ve realmente el modelo, con la especie y confianza predichas.
 
-<table>
-<tr>
-<td align="center"><b>R- pulmo</b></td>
-<td align="center"><b>P- noctiluca</b></td>
-<td align="center"><b>C- tuberculata</b></td>
-</tr>
-<tr>
-<td><video src="SpikeYOLO_for_Gen1/video/pulmo_video_pred_delta_batch.mp4" controls width="260"></video></td>
-<td><video src="SpikeYOLO_for_Gen1/video/pelagia_video_pred_delta_batch.mp4" controls width="260"></video></td>
-<td><video src="SpikeYOLO_for_Gen1/video/huevo_frito_video_pred_delta_batch.mp4" controls width="260"></video></td>
-</tr>
-</table>
+| R- pulmo | P- noctiluca | C- tuberculata |
+|:---:|:---:|:---:|
+| ![R- pulmo inference demo](SpikeYOLO_for_Gen1/video/pulmo_video.gif) | ![P- noctiluca inference demo](SpikeYOLO_for_Gen1/video/pelagia_video.gif) | ![C- tuberculata inference demo](SpikeYOLO_for_Gen1/video/huevo_frito_video.gif) |
 
 ---
 
