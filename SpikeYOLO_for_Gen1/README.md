@@ -14,3 +14,24 @@ python train.py
 
 ## 5.test / get_firing_rate
 python test.py
+
+## 6. Jellyfish video inference demo
+
+`video_inference_delta.py` runs the jellyfish SNN detector (RGB adaptation of SpikeYOLO, see
+`customdataset.py`/`spike_trainer.py`) over a video clip: each frame is edge-filtered (Canny) and
+spike-encoded via delta modulation (one spike train per frame, comparing it against the previous
+frame) before going through the model. The clips below show the Canny edge map the model actually
+sees, annotated with the predicted species and confidence.
+
+<table>
+<tr>
+<td align="center"><b>R- pulmo</b></td>
+<td align="center"><b>P- noctiluca</b></td>
+<td align="center"><b>C- tuberculata</b></td>
+</tr>
+<tr>
+<td><video src="video/pulmo_video_pred_delta_batch.mp4" controls width="260"></video></td>
+<td><video src="video/pelagia_video_pred_delta_batch.mp4" controls width="260"></video></td>
+<td><video src="video/huevo_frito_video_pred_delta_batch.mp4" controls width="260"></video></td>
+</tr>
+</table>
