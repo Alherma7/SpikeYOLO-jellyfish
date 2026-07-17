@@ -4,6 +4,26 @@
 >
 > Los datasets de medusas (`dataset_Jellyfish/`, `SpikeYOLO_for_Gen1/jellyFish.v1i.yolov9*/`) y los checkpoints (`*.pt`) no están incluidos en este repo — hay que generarlos/descargarlos aparte.
 
+### Demo: inferencia en vídeo (medusas)
+
+`SpikeYOLO_for_Gen1/video_inference_delta.py` corre el detector SNN de medusas sobre un vídeo:
+cada frame se filtra con Canny y se codifica a impulsos mediante delta modulation (comparando
+cada frame con el anterior) antes de pasar por el modelo. Los clips muestran el mapa de bordes
+que ve realmente el modelo, con la especie y confianza predichas.
+
+<table>
+<tr>
+<td align="center"><b>R- pulmo</b></td>
+<td align="center"><b>P- noctiluca</b></td>
+<td align="center"><b>C- tuberculata</b></td>
+</tr>
+<tr>
+<td><video src="SpikeYOLO_for_Gen1/video/pulmo_video_pred_delta_batch.mp4" controls width="260"></video></td>
+<td><video src="SpikeYOLO_for_Gen1/video/pelagia_video_pred_delta_batch.mp4" controls width="260"></video></td>
+<td><video src="SpikeYOLO_for_Gen1/video/huevo_frito_video_pred_delta_batch.mp4" controls width="260"></video></td>
+</tr>
+</table>
+
 ---
 
 # Integer-Valued Training and Spike-Driven Inference Spiking Neural Network for High-performance and Energy-efficient Object Detection (ECCV2024 Best Paper Candidate)
